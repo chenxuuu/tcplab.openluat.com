@@ -83,7 +83,7 @@ namespace tcplab.openluat.com
         private static System.Timers.Timer Timers_Timer = new System.Timers.Timer();
         private static void Timers_Timer_Elapsed(object sender, System.Timers.ElapsedEventArgs e)
         {
-            ws.Send("{\"function\": 0}");
+            ws.Send("123");
         }
 
         /// <summary>
