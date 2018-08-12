@@ -43,13 +43,15 @@ namespace tcplab.openluat.com
             }
         }
 
+
+
         /// <summary>
         /// 打印日志
         /// </summary>
         /// <param name="s">要打印的东西</param>
         private static void PrintLog(string s)
         {
-            Console.WriteLine("[" +DateTime.Now.ToString()+"]"+s);
+            Console.WriteLine("[" + DateTime.Now.ToString() + "]" + s);
         }
 
         /// <summary>
@@ -70,6 +72,18 @@ namespace tcplab.openluat.com
                 return;
             }
             PrintLog("成功创建保活连接");
+
+
+            //手动设置Timer，开始执行 
+            Timers_Timer.Interval = 10000;
+            Timers_Timer.Enabled = true;
+            Timers_Timer.Elapsed += new System.Timers.ElapsedEventHandler(Timers_Timer_Elapsed);
+        }
+
+        private static System.Timers.Timer Timers_Timer = new System.Timers.Timer();
+        private static void Timers_Timer_Elapsed(object sender, System.Timers.ElapsedEventArgs e)
+        {
+            ws.Send("{\"function\": 0}");
         }
 
         /// <summary>
@@ -99,6 +113,8 @@ namespace tcplab.openluat.com
                 JObject jo = (JObject)JsonConvert.DeserializeObject(e.Data);
                 if((int)jo["function"] == 0)
                 {
+                    if (!firstConnect)
+                        return;
                     luat_ip = (string)jo["ip"];
                     luat_port = (string)jo["port"];
                     //Console.Clear();
